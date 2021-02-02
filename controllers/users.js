@@ -34,7 +34,7 @@ const usersController = {
         code: 200,
         operation: "success",
         description: `Fetch users with id: ${req.params.userId}`,
-        data: data.rows,
+        data: data.rows[0],
       });
     } catch {
       res.sendStatus(500);

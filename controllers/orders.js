@@ -41,7 +41,7 @@ const ordersController = {
         code: 200,
         operation: "success",
         description: `Fetch order with id: ${req.params.orderId}`,
-        data: data.rows,
+        data: data.rows[0],
       });
     } catch {
       res.sendStatus(500);
