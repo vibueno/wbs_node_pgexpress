@@ -9,15 +9,10 @@ const pool = new Pool({
   port: DBPORT,
 });
 
-const query = async (req, res, query, description) => {
+const query = async (query) => {
   try {
     const data = await pool.query(query);
-    res.json({
-      code: 200,
-      operation: "success",
-      description: description,
-      data: data.rows,
-    });
+    return data;
   } catch (err) {
     console.error("Error executing query", err);
   }
