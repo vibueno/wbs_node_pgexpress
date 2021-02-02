@@ -9,4 +9,18 @@ const pool = new Pool({
   port: DBPORT,
 });
 
-module.exports = pool;
+const runQuery = async (req, res, query, description) => {
+  try {
+    const data = await pool.query(query);
+    res.json({
+      code: 200,
+      operation: "success",
+      description: description,
+      data: data.rows,
+    });
+  } catch (err) {
+    console.error("Error executing query", err);
+  }
+};
+
+module.exports = runQuery;

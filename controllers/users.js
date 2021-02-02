@@ -1,19 +1,5 @@
 // pg config
-const pool = require("../db.js");
-
-const runQuery = async (req, res, query) => {
-  try {
-    const data = await pool.query(query);
-    res.json({
-      code: 200,
-      operation: "success",
-      description: `Fetch all users`,
-      data: data.rows,
-    });
-  } catch (err) {
-    console.error("Error executing query", err);
-  }
-};
+const runQuery = require("../db.js");
 
 const usersController = {
   getAll: (req, res) => {
@@ -21,7 +7,7 @@ const usersController = {
       text: "SELECT * FROM users",
     };
 
-    runQuery(req, res, query);
+    runQuery(req, res, query, "Fetch all users");
   },
 
   getUserById: (req, res) => {
@@ -30,7 +16,7 @@ const usersController = {
       values: [req.params.userId],
     };
 
-    runQuery(req, res, query);
+    runQuery(req, res, query, `Fetch users with id: ${req.params.userId}`);
   },
 };
 
