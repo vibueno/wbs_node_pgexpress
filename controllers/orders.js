@@ -19,6 +19,10 @@ const ordersController = {
   getAll: (req, res) => {
     res.end("returning all orders");
   },
+
+  getOrderById: (req, res) => {
+    res.end(`returning order with id ${req.params.orderId}`);
+  },
 };
 
 module.exports = ordersController;
