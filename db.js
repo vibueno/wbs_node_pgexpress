@@ -9,7 +9,7 @@ const pool = new Pool({
   port: DBPORT,
 });
 
-const runQuery = async (req, res, query, description) => {
+const query = async (req, res, query, description) => {
   try {
     const data = await pool.query(query);
     res.json({
@@ -23,4 +23,6 @@ const runQuery = async (req, res, query, description) => {
   }
 };
 
-module.exports = runQuery;
+db = { query };
+
+module.exports = db;
