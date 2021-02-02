@@ -8,15 +8,18 @@ const usersController = {
     const query = {
       text: getAllSQL,
     };
+    try {
+      const data = await db.query(query);
 
-    const data = await db.query(query);
-
-    res.json({
-      code: 200,
-      operation: "success",
-      description: "Fetch all users",
-      data: data.rows,
-    });
+      res.json({
+        code: 200,
+        operation: "success",
+        description: "Fetch all users",
+        data: data.rows,
+      });
+    } catch {
+      res.sendStatus(500);
+    }
   },
 
   getUserById: async (req, res) => {
@@ -24,15 +27,18 @@ const usersController = {
       text: `${getAllSQL} WHERE id=$1`,
       values: [req.params.userId],
     };
+    try {
+      const data = await db.query(query);
 
-    const data = await db.query(query);
-
-    res.json({
-      code: 200,
-      operation: "success",
-      description: "Fetch users with id: ${req.params.userId}",
-      data: data.rows,
-    });
+      res.json({
+        code: 200,
+        operation: "success",
+        description: `Fetch users with id: ${req.params.userId}`,
+        data: data.rows,
+      });
+    } catch {
+      res.sendStatus(500);
+    }
   },
 };
 

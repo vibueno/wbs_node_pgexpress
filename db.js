@@ -10,12 +10,8 @@ const pool = new Pool({
 });
 
 const query = async (query) => {
-  try {
-    const data = await pool.query(query);
-    return data;
-  } catch (err) {
-    console.error("Error executing query", err);
-  }
+  const data = await pool.query(query);
+  return data;
 };
 
 db = { query };

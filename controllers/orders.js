@@ -15,14 +15,18 @@ const ordersController = {
       text: getAllSQL,
     };
 
-    const data = await db.query(query);
+    try {
+      const data = await db.query(query);
 
-    res.json({
-      code: 200,
-      operation: "success",
-      description: "Fetch all orders",
-      data: data.rows,
-    });
+      res.json({
+        code: 200,
+        operation: "success",
+        description: "Fetch all orders",
+        data: data.rows,
+      });
+    } catch {
+      res.sendStatus(500);
+    }
   },
 
   getOrderById: async (req, res) => {
@@ -30,17 +34,18 @@ const ordersController = {
       text: `${getAllSQL} WHERE orders.id=$1`,
       values: [req.params.orderId],
     };
+    try {
+      const data = await db.query(query);
 
-    const data = await db.query(query);
-
-    res.json({
-      code: 200,
-      operation: "success",
-      description: `Fetch order with id: ${req.params.orderId}`,
-      data: data.rows,
-    });
-
-    db.query(query);
+      res.json({
+        code: 200,
+        operation: "success",
+        description: `Fetch order with id: ${req.params.orderId}`,
+        data: data.rows,
+      });
+    } catch {
+      res.sendStatus(500);
+    }
   },
 };
 
