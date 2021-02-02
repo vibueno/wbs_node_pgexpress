@@ -10,8 +10,10 @@ const express = require("express");
 const app = express();
 
 const usersRoutes = require("./routes/users");
+const ordersRoutes = require("./routes/orders");
 
 app.use("/users", usersRoutes);
+app.use("/orders", ordersRoutes);
 
 //Start server
 
