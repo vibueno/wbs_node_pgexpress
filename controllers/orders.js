@@ -2,12 +2,14 @@
 const runQuery = require("../db.js");
 
 const getAllSQL = `
-  SELECT id, price, date, (SELECT row_to_json(userinfo) FROM
-  (
-    SELECT id, first_name, last_name, age
-    FROM users WHERE users.id = orders.user_id
-  ) userinfo
-) AS user FROM orders`;
+  SELECT id, price, date,
+  ( SELECT row_to_json(userinfo)
+    FROM
+      (
+        SELECT id, first_name, last_name, age
+        FROM users WHERE users.id = orders.user_id
+      ) userinfo
+) FROM orders`;
 
 const ordersController = {
   getAll: async (req, res) => {
@@ -25,7 +27,7 @@ const ordersController = {
         data: data.rows,
       });
     } catch {
-      res.sendStatus(500);
+      return res.sendStatus(500);
     }
   },
 
@@ -44,7 +46,7 @@ const ordersController = {
         data: data.rows[0],
       });
     } catch {
-      res.sendStatus(500);
+      return res.sendStatus(500);
     }
   },
 };

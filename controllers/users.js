@@ -18,7 +18,7 @@ const usersController = {
         data: data.rows,
       });
     } catch {
-      res.sendStatus(500);
+      return res.sendStatus(500);
     }
   },
 
@@ -37,7 +37,7 @@ const usersController = {
         data: data.rows[0],
       });
     } catch {
-      res.sendStatus(500);
+      return res.sendStatus(500);
     }
   },
 };
