@@ -7,3 +7,6 @@ module.exports = router;
 
 // '/users/': returns all users
 router.get("/", usersController.getAll);
+
+// '/users/:userId': returns user with id userId
+router.get("/:userId", usersController.getUserById);
