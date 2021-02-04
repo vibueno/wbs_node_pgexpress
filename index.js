@@ -9,8 +9,13 @@ const { PORT } = process.env;
 const express = require("express");
 const app = express();
 
+const bodyParser = require("body-parser");
+
 const usersRoutes = require("./routes/users");
 const ordersRoutes = require("./routes/orders");
+
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.json());
 
 app.use("/users", usersRoutes);
 app.use("/orders", ordersRoutes);
