@@ -22,10 +22,10 @@ const usersController = {
     }
   },
 
-  getUserById: async (req, res) => {
+  getById: async (req, res) => {
     const query = {
       text: `${getAllSQL} WHERE id=$1`,
-      values: [req.params.userId],
+      values: [req.params.id],
     };
     try {
       const data = await db.query(query);
@@ -33,7 +33,7 @@ const usersController = {
       res.json({
         code: 200,
         operation: "success",
-        description: `Fetch users with id: ${req.params.userId}`,
+        description: `Fetch user with id: ${req.params.id}`,
         data: data.rows[0],
       });
     } catch {

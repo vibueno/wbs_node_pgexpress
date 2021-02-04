@@ -5,7 +5,7 @@ const ordersController = require("../controllers/orders");
 // '/orders/': returns all orders
 router.get("/", ordersController.getAll);
 
-// '/orders/:orderId': returns order with id orderId
-router.get("/:orderId", ordersController.getOrderById);
+// '/orders/:id': returns order with id :id
+router.get("/:id", ordersController.getById);
 
 module.exports = router;

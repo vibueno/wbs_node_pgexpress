@@ -9,7 +9,7 @@ const getAllSQL = `
         SELECT id, first_name, last_name, age
         FROM users WHERE users.id = orders.user_id
       ) userinfo
-) FROM orders`;
+) AS user FROM orders`;
 
 const ordersController = {
   getAll: async (req, res) => {
@@ -31,10 +31,10 @@ const ordersController = {
     }
   },
 
-  getOrderById: async (req, res) => {
+  getById: async (req, res) => {
     const query = {
       text: `${getAllSQL} WHERE orders.id=$1`,
-      values: [req.params.orderId],
+      values: [req.params.id],
     };
     try {
       const data = await db.query(query);
@@ -42,7 +42,7 @@ const ordersController = {
       res.json({
         code: 200,
         operation: "success",
-        description: `Fetch order with id: ${req.params.orderId}`,
+        description: `Fetch order with id: ${req.params.id}`,
         data: data.rows[0],
       });
     } catch {

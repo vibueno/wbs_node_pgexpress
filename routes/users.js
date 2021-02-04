@@ -5,7 +5,7 @@ const usersController = require("../controllers/users");
 // '/users/': returns all users
 router.get("/", usersController.getAll);
 
-// '/users/:userId': returns user with id userId
-router.get("/:userId", usersController.getUserById);
+// '/users/:id': returns user with id :id
+router.get("/:id", usersController.getById);
 
 module.exports = router;
