@@ -1,7 +1,7 @@
 const buildResponse = (status, message, data) => {
   return {
     status: status,
-    operation: status === 200 ? "success" : "fail",
+    operation: status === 200 ? "succeded" : "failed",
     description: message,
     data: data,
   };

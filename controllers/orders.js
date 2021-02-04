@@ -1,6 +1,8 @@
 // pg config
 const runQuery = require("../db.js");
 
+const buildResponse = require("../response.js");
+
 const getAllSQL = `
   SELECT id, price, date,
   ( SELECT row_to_json(userinfo)
@@ -11,42 +13,51 @@ const getAllSQL = `
       ) userinfo
 ) AS user FROM orders`;
 
+let response = {};
+
 const ordersController = {
   getAll: async (req, res) => {
-    const query = {
-      text: getAllSQL,
-    };
-
     try {
+      const query = {
+        text: getAllSQL,
+      };
+
       const data = await db.query(query);
 
-      res.json({
-        code: 200,
-        operation: "success",
-        description: "Fetch all orders",
-        data: data.rows,
-      });
-    } catch {
-      return res.sendStatus(500);
+      res.json(buildResponse(200, "Fetch all orders", data.rows));
+    } catch (e) {
+      if (e.status) {
+        return res.status(e.status).json(e);
+      } else {
+        response = buildResponse(500, "Internal server error", e.message);
+        return res.status(response.status).json(response);
+      }
     }
   },
 
   getById: async (req, res) => {
-    const query = {
-      text: `${getAllSQL} WHERE orders.id=$1`,
-      values: [req.params.id],
-    };
     try {
+      const query = {
+        text: `${getAllSQL} WHERE orders.id=$1`,
+        values: [req.params.id],
+      };
+
       const data = await db.query(query);
 
-      res.json({
-        code: 200,
-        operation: "success",
-        description: `Fetch order with id: ${req.params.id}`,
-        data: data.rows[0],
-      });
-    } catch {
-      return res.sendStatus(500);
+      res.json(
+        buildResponse(
+          200,
+          `Fetch order with id: ${req.params.id}`,
+          data.rows[0]
+        )
+      );
+    } catch (e) {
+      if (e.status) {
+        return res.status(e.status).json(e);
+      } else {
+        response = buildResponse(500, "Internal server error", e.message);
+        return res.status(response.status).json(response);
+      }
     }
   },
 };

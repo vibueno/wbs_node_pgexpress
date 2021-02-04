@@ -1,53 +1,58 @@
 // pg config
 const runQuery = require("../db.js");
 
-const buildResponse = require("../error.js");
+const buildResponse = require("../response.js");
 
 const getAllSQL = "SELECT id, first_name, last_name, age FROM users";
 
+let response = {};
+
 const usersController = {
   getAll: async (req, res) => {
-    const query = {
-      text: getAllSQL,
-    };
     try {
-      const data = await db.query(query);
+      const query = {
+        text: getAllSQL,
+      };
 
-      res.json({
-        code: 200,
-        operation: "success",
-        description: "Fetch all users",
-        data: data.rows,
-      });
-    } catch {
-      return res.sendStatus(500);
+      const data = await db.query(query);
+      res.json(buildResponse(200, "Fetch all users", data.rows));
+    } catch (e) {
+      if (e.status) {
+        return res.status(e.status).json(e);
+      } else {
+        response = buildResponse(500, "Internal server error", e.message);
+        return res.status(response.status).json(response);
+      }
     }
   },
 
   getById: async (req, res) => {
-    const query = {
-      text: `${getAllSQL} WHERE id=$1`,
-      values: [req.params.id],
-    };
     try {
+      const query = {
+        text: `${getAllSQL} WHERE id=$1`,
+        values: [req.params.id],
+      };
+
       const data = await db.query(query);
 
-      res.json({
-        code: 200,
-        operation: "success",
-        description: `Fetch user with id: ${req.params.id}`,
-        data: data.rows[0],
-      });
-    } catch {
-      return res.sendStatus(500);
+      res.json(
+        buildResponse(200, `Fetch user with id: ${req.params.id}`, data.rows[0])
+      );
+    } catch (e) {
+      if (e.status) {
+        return res.status(e.status).json(e);
+      } else {
+        response = buildResponse(500, "Internal server error", e.message);
+        return res.status(response.status).json(response);
+      }
     }
   },
 
   create: async (req, res) => {
-    let response = {};
-
     try {
-      const { first_name, last_name, age } = req.body;
+      const { first_name, last_name } = req.body;
+      let { age } = req.body;
+      age = parseInt(age);
 
       if (
         !first_name.trim().length ||
@@ -55,8 +60,7 @@ const usersController = {
         !Number.isInteger(age) ||
         age < 0
       ) {
-        response = buildResponse(400, "Invalid input data", req.body);
-        throw new Error("Invalid input data");
+        throw buildResponse(400, "Invalid input data", req.body);
       }
 
       const query = {
@@ -68,14 +72,12 @@ const usersController = {
       const data = await db.query(query);
 
       response = buildResponse(200, "Inserted user", data.rows[0]);
-
       res.status(response.status).json(response);
     } catch (e) {
-      if (response.status) {
-        return res.status(response.status).json(response);
+      if (e.status) {
+        return res.status(e.status).json(e);
       } else {
         response = buildResponse(500, "Internal server error", e.message);
-
         return res.status(response.status).json(response);
       }
     }
